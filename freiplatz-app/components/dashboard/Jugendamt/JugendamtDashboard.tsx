@@ -1,17 +1,14 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 import { supabase } from "@/lib/supabase";
-import { QuickActions } from "@/components/dashboard/QuickActions";
+
 import { ImpactCards } from "@/components/dashboard/ImpactCards";
 import { FocusCard } from "@/components/dashboard/FocusCard";
 import { ChildrenInFocus } from "@/components/dashboard/ChildrenInFocus";
 
-export default function DashboardPage() {
+export default function JugendamtDashboard() {
 
   const [impact, setImpact] = useState({
   childrenSupported: 0,
@@ -20,28 +17,21 @@ export default function DashboardPage() {
   tasksToday: 0,
 });
 
-  const [firstName, setFirstName] =
-  useState("Kollege");
+const [firstName, setFirstName] = useState("Kollege");
 
-const [greeting, setGreeting] =
-  useState("");
+const [greeting, setGreeting] = useState("");
 
-const [message, setMessage] =
-  useState("");
+const [message, setMessage] = useState("");
 
-  const [places, setPlaces] =
-    useState(0);
+const [places, setPlaces] = useState(0);
 
-  const [reservations, setReservations] =
-    useState(0);
+const [reservations, setReservations] = useState(0);
 
-  const [approved, setApproved] =
-    useState(0);
+const [approved, setApproved] = useState(0);
 
-  const [activities, setActivities] =
-    useState<any[]>([]);
+const [activities, setActivities] = useState<any[]>([]);
 
-    async function loadImpact() {
+ async function loadImpact() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -121,7 +111,7 @@ const [message, setMessage] =
   });
 }
 
-    async function loadWelcome() {
+ async function loadWelcome() {
 
     const {
         data: { user },
@@ -151,7 +141,7 @@ const [message, setMessage] =
 
 }
 
-  async function loadStats() {
+ async function loadStats() {
     const { count: placesCount } =
       await supabase
         .from("free_places")
@@ -202,35 +192,33 @@ const [message, setMessage] =
     }
   }
 
-  useEffect(() => {
-    loadWelcome();
-    loadStats();
-    loadActivities();
-    loadImpact();
+ useEffect(() => {
+  loadWelcome();
+  loadStats();
+  loadActivities();
+  loadImpact();
 
-    const channel = supabase
-      .channel("dashboard realtime")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "notifications",
-        },
-        () => {
-          loadActivities();
-        }
-      )
-      .subscribe();
+  const channel = supabase
+    .channel("dashboard realtime")
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "notifications",
+      },
+      () => {
+        loadActivities();
+      }
+    )
+    .subscribe();
 
-    return () => {
-      supabase.removeChannel(
-        channel
-      );
-    };
-  }, []);
+  return () => {
+    supabase.removeChannel(channel);
+  };
+}, []);
 
-  return (
+ return (
 
   <div>
 
@@ -307,8 +295,6 @@ const [message, setMessage] =
     Ihre aktuellen Aufgaben, Aktivitäten und Prioritäten auf einen Blick.
   </p>
 </div>
-
-<QuickActions />
 
 <ImpactCards
   childrenSupported={
@@ -523,21 +509,20 @@ const [message, setMessage] =
       </div>
     </div>
   );
-}
+  }
 
-const cardStyle = {
+  const cardStyle = {
   background: "white",
   borderRadius: "32px",
   padding: "32px",
-  boxShadow:
-    "0 1px 3px rgba(0,0,0,0.08)",
+  boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
 };
 
 const badgeStyle = {
   background: "#f5f7fb",
   padding: "10px 16px",
   borderRadius: "14px",
-  fontSize: "14x",
+  fontSize: "14px",
   fontWeight: 600,
   width: "fit-content",
 };
